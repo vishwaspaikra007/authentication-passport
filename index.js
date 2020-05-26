@@ -1,7 +1,9 @@
 const express = require('express')
 const app = express()
 const register = require('./admin/register')
+const dotenv = require('dotenv')
 
+dotenv.config()
 app.use(express.json())
 app.use(register)
 app.use(require('./admin/login'))

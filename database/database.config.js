@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
-const dbPath = require('./dbPath')
-mongoose.connect(dbPath, {
+const dotenv = require('dotenv')
+
+dotenv.config()
+mongoose.connect(process.env.DB_PATH, {
     useNewUrlParser: true
 })
 

@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const userPasswordModel = require('../database/models/userPasswordModel')
 const bcrypt = require('bcrypt')
+const signJWT = require('./jwt')
+
 router.post('/register',(req, res) => {
     userPasswordModel.findOne({email: req.body.email})
         .then((user)=> {
@@ -16,14 +18,15 @@ router.post('/register',(req, res) => {
                         email: req.body.email,
                         password: hash
                     })
-                    .then(()=> {
-                        console.log("successfuly posted")
+                    .then((user)=> {
+                        let payloadData = {}
+                        const signedJWT = signJWT({id:user.id, payloadData: payloadData})
+                        console.log("successfuly created", signedJWT)
+                        res.status(201).send(signedJWT)
                     })
                 })
             }
         })
-        
-
 })
 
 module.exports = router
