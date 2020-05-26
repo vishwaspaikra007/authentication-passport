@@ -12,6 +12,11 @@ POST http://localhost:3000/login
 content-type: application/json
 
 {
-    "email": "vishwaspaikra009@gmail.com",
+    "email": "vishwaspaikra007@gmail.com",
     "password": "hello"
 }
+
+###
+
+GET http://localhost:3000/check
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWNkMDE1YTRmZTg0ZDIzMjQ1OTIwNTUiLCJhZ2UiOjI0LCJwb3N0Ijo0MCwiaWF0IjoxNTkwNTA3NzM1LCJleHAiOjE1OTA1MDg2MzV9.vmhTvkS5mcQIkOaSUIzkYOlAOZsy3EcroCaImWKAjf0
