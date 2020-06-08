@@ -4,7 +4,8 @@ const userPasswordModel = require('../database/models/userPasswordModel')
 const bcrypt = require('bcrypt')
 const signJWT = require('./jwt')
 
-router.post('/login', (req, res)=> {
+router.post('/login', (req, res, next)=> {
+    console.log(req.body, "\n", req.cookies)
     userPasswordModel.findOne({email: req.body.email})
         .then(user => {
             console.log(user)
@@ -16,9 +17,20 @@ router.post('/login', (req, res)=> {
                             age: 24,
                             post: 40
                         }
+
                         const signedJWT = signJWT({id:user.id, payloadData: payloadData})
-                        console.log("successfuly created", signedJWT)
-                        res.status(201).send(signedJWT)
+                        const signedRefreshJWT = signJWT({id:user.id},"refresh")
+
+                        const cookieOptions = {
+                            httpOnly: true,
+                            expires: 0 ,
+                            sameSite: 'none',
+                            secure: true
+                        }
+
+                        // console.log("successfuly created", signedJWT, "\n", signedRefrestJWT)]
+                        res.cookie("refreshToken",signedRefreshJWT, cookieOptions).send(signedJWT)
+
                     }
                     else
                     {

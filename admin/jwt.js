@@ -15,11 +15,13 @@ function signJWT(user, type) {
     let payload = {
         sub: user.id,
     }
+    if(type === "refresh")
+        return jwt.sign(payload, refreshTokenKey)
 
     for(let key in user.payloadData)
         payload[key]=user.payloadData[key]
 
-    return jwt.sign(payload, type === "refresh" ? refreshTokenKey : tokenKey, options)
+    return jwt.sign(payload, tokenKey, options)
 }
 
 module.exports =  signJWT
