@@ -8,6 +8,7 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const path = require('path')
 const post = require('./admin/post')
+const requestMail = require('./admin/requestMail')
 
 dotenv.config()
 app.use(express.json())
@@ -25,6 +26,7 @@ app.set('view engine', 'ejs')
 app.use(register)
 app.use(login)
 app.use(post)
+app.use(requestMail)
 
 app.get('/',(req, res) => {
     res.render('index.ejs')

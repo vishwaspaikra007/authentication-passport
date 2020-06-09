@@ -29,3 +29,11 @@ content-type: application/json
    "email": "vishwaspaikra007@gmail.com",
     "password": "hello" 
 }
+
+###
+POST http://localhost:3000/requestMail
+content-type: application/json
+
+{
+   "to": "vishwaspaikra007@gmail.com"
+}
