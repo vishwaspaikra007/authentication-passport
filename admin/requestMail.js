@@ -16,7 +16,7 @@ router.post('/requestMail', (req, res) => {
     const emailOTP = new emailsOTPModel()
 
     const OTP = parseInt(Math.random() * 1000000)
-    const otpText = `${OTP} is your OTP for whatsApp look alike Email verification. valid for 1 minute sent to you at ${new Date()}`
+    const otpText = `${OTP} is your OTP for whatsApp look alike Email verification. valid for 2 minute sent to you at ${new Date()}`
 
     let mailOptions = {
         from: 'whatsapplookalike007@gmail.com',
@@ -35,18 +35,9 @@ router.post('/requestMail', (req, res) => {
                 console.log(doc)
                 emailOTP.email = req.body.to
                 emailOTP.otp = OTP
-                emailOTP.sentAt = Date.now()
                 emailOTP.save().then(user => {
                     console.log(user._id)
                     console.log(user)
-                    setTimeout(() => {
-                        emailsOTPModel.deleteOne({
-                            email: user.email
-                        }).then(doc => {
-                            console.log('deleted', doc)
-                        })
-
-                    }, 60000);
                 }).catch(err => {
                     res.send(err)
                 })

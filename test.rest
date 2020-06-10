@@ -37,3 +37,12 @@ content-type: application/json
 {
    "to": "vishwaspaikra007@gmail.com"
 }
+
+###
+POST http://localhost:3000/verifyOTP
+content-type: application/json
+
+{
+   "email": "vishwaspaikra007@gmail.com",
+   "otp": 614156
+}

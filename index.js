@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser')
 const path = require('path')
 const post = require('./admin/post')
 const requestMail = require('./admin/requestMail')
-
+const verifyOTP = require('./admin/verifyOTP')
 dotenv.config()
 app.use(express.json())
 app.use(passport.initialize())
@@ -27,6 +27,7 @@ app.use(register)
 app.use(login)
 app.use(post)
 app.use(requestMail)
+app.use(verifyOTP)
 
 app.get('/',(req, res) => {
     res.render('index.ejs')

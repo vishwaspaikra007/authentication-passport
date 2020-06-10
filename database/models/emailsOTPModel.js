@@ -11,10 +11,7 @@ const emailsOTPSchema = new schema({
         type: Number,
         required: true
     },
-    sentAt: {
-        type: Number,
-        required: true
-    }
-})
+}, {timestamps: true})
 
+emailsOTPSchema.index({createdAt: 1},{expireAfterSeconds: 120})
 module.exports = mongoose.model('emailsOTP', emailsOTPSchema)
