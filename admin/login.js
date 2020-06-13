@@ -29,7 +29,8 @@ router.post('/login', (req, res, next)=> {
                         }
 
                         // console.log("successfuly created", signedJWT, "\n", signedRefrestJWT)]
-                        res.cookie("refreshToken",signedRefreshJWT, cookieOptions).send(signedJWT)
+                        res.cookie("refreshToken",signedRefreshJWT, cookieOptions)
+                        res.send({logedIn: true, msg:"login successfull", signedJWT})
 
                     }
                     else

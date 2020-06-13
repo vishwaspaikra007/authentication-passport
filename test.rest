@@ -2,7 +2,7 @@ POST http://localhost:3000/register
 content-type: application/json
 
 {
-    "email": "vishwaspaikra008@gmail.com",
+    "email": "vishwaspaikra00@gmail.com",
     "password": "hello"
 }
 
@@ -44,5 +44,5 @@ content-type: application/json
 
 {
    "email": "vishwaspaikra007@gmail.com",
-   "otp": 614156
+   "otp": 797596
 }

@@ -8,7 +8,8 @@ const schema = {
     password: {
         type: mongoose.SchemaTypes.String,
         required: true,
-    }
+    },
+    name: String
 }
 const User = mongoose.model('userPassword', mongoose.Schema(schema))
 module.exports = User

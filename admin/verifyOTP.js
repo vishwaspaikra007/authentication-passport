@@ -10,7 +10,7 @@ router.post('/verifyOTP', (req,res) => {
         if(!result)
             res.send({verified: false, msg:"otp not valid"})
         else
-            res.send({verified: true, msg:"emial verified"})
+            res.send({verified: true, msg:"email verified"})
     }).catch(err => {
         console.log("err", err)
     })

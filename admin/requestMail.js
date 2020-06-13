@@ -28,7 +28,7 @@ router.post('/requestMail', (req, res) => {
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
-            res.send('error')
+            res.send({OTPsent: false, msg: error})
         } else {
             console.log('Email sent: ' + info.response);
             emailsOTPModel.deleteOne({ email: req.body.to }).then(doc => {
@@ -36,12 +36,11 @@ router.post('/requestMail', (req, res) => {
                 emailOTP.email = req.body.to
                 emailOTP.otp = OTP
                 emailOTP.save().then(user => {
-                    console.log(user._id)
-                    console.log(user)
+                    res.send({OTPsent: true, msg: "email sent"})
                 }).catch(err => {
-                    res.send(err)
+                    res.send({OTPsent: false, msg: err})
                 })
-                res.send("email sent")
+                
             }).catch(err => {
                 res.send(err)
             })
