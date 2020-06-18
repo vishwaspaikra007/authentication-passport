@@ -3,6 +3,9 @@ const router = express.Router()
 const userPasswordModel = require('../database/models/userPasswordModel')
 const bcrypt = require('bcrypt')
 const signJWT = require('./jwt')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 router.post('/register',(req, res) => {
     userPasswordModel.findOne({email: req.body.email})
@@ -21,21 +24,33 @@ router.post('/register',(req, res) => {
                     })
                     .then((user)=> {
                         let payloadData = {}
-                        const signedJWT = signJWT({id:user.id, payloadData: payloadData})
-                        const signedRefreshJWT = signJWT({id:user.id},"refresh")
+                        const signedJWT = signJWT({id:user._id, payloadData: payloadData})
+                        const signedRefreshJWT = signJWT({id:user._id},"refresh")
 
                         const cookieOptions = {
                             httpOnly: true,
                             expires: 0 ,
                             sameSite: 'none',
-                            secure: true
+                            secure: JSON.parse(process.env.PRODUCTION) ? true : false
                         }
-
-                        res.cookie("refreshToken",signedRefreshJWT, cookieOptions)
-                        res.status(201).send({registered: true, msg:"registration successfull", signedJWT})
+                        userPasswordModel.update({_id: user._id}, {$push: {refreshTokens: signedRefreshJWT}})
+                            .then(result => {
+                                console.log(result)
+                                res.cookie("refreshToken",signedRefreshJWT, cookieOptions)
+                                res.status(201).send({registered: true, msg:"registration successfull", signedJWT})
+                            }).catch(err => {
+                                res.send({registered: false, msg: err})
+                            })
+                        
+                    }).catch(err => {
+                        console.log(err)
+                        res.send({registered: false, msg: err})
                     })
                 })
             }
+        }).catch(err => {
+            console.log(err)
+            res.send({registered: false, msg: err})
         })
 })
 

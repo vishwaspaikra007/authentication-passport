@@ -25,6 +25,6 @@ passport.use(new JwtStrategy(options, (jwt_payload, done)=> {
             done(null, false)
         }
     })
-}))
+}))    
 
 module.exports = passport

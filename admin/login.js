@@ -3,6 +3,9 @@ const router = express.Router()
 const userPasswordModel = require('../database/models/userPasswordModel')
 const bcrypt = require('bcrypt')
 const signJWT = require('./jwt')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 router.post('/login', (req, res, next)=> {
     console.log(req.body, "\n", req.cookies)
@@ -10,7 +13,7 @@ router.post('/login', (req, res, next)=> {
         .then(user => {
             console.log(user)
             if(user){ 
-                bcrypt.compare(req.body.password, user.password, (err, result)=> {
+                bcrypt.compare(req.body.PWD, user.password, (err, result)=> {
                     if(result)
                      {
                         let payloadData = {
@@ -25,23 +28,40 @@ router.post('/login', (req, res, next)=> {
                             httpOnly: true,
                             expires: 0 ,
                             sameSite: 'none',
-                            secure: true
+                            secure: JSON.parse(process.env.PRODUCTION) ? true : false
                         }
-
-                        // console.log("successfuly created", signedJWT, "\n", signedRefrestJWT)]
-                        res.cookie("refreshToken",signedRefreshJWT, cookieOptions)
-                        res.send({logedIn: true, msg:"login successfull", signedJWT})
+                        
+                        if(req.cookies.refreshToken) {
+                            userPasswordModel.update({_id: user._id}, {$pull: {refreshTokens: req.cookies.refreshToken}}).then(result => {
+                                console.log("deleted client old refresh token", result)
+                            }).catch(err => {
+                                console.log("error in deleting old refresh token", err)
+                            })
+                        }
+                        
+                        
+                        userPasswordModel.update({_id: user._id}, {$push: {refreshTokens: signedRefreshJWT}})
+                            .then(result => {
+                                console.log(result)
+                                res.cookie("refreshToken",signedRefreshJWT, cookieOptions)
+                                res.send({logedIn: true, msg:"login successfull", signedJWT})
+                            }).catch(err => {
+                                res.status(401).send(err)
+                            })
 
                     }
                     else
                     {
                         console.log("wrong password")
-                        res.status(401).send("not authorized")
+                        res.status(401).send()
                     }
                 })
             } else {
                 console.log("no user with this email")
+                res.send({logedIn: false, msg:"login unsuccessfull check your email"})
             }
+        }).catch(err => {
+            res.send({logedIn: false, msg:"login unsuccessfull database error"})
         })
 })
 

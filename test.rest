@@ -13,13 +13,13 @@ content-type: application/json
 
 {
     "email": "vishwaspaikra007@gmail.com",
-    "password": "hello"
+    "PWD": "vishwas"
 }
 
 ###
 
 GET http://localhost:3000/check
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWNkMDE1YTRmZTg0ZDIzMjQ1OTIwNTUiLCJhZ2UiOjI0LCJwb3N0Ijo0MCwiaWF0IjoxNTkxMzUwODQxLCJleHAiOjE1OTEzNTE3NDF9.KKGrjhtidZryav_JKXH6heN4as_IUKtTYhqcrK2kOew
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWVhNWQ5YWM1ZjM3MzNjZGYwZmVhMDkiLCJhZ2UiOjI0LCJwb3N0Ijo0MCwiaWF0IjoxNTkyNDg3MTk3LCJleHAiOjE1OTI0ODgwOTd9.dwPYjQtwk3fNpVyOELbUPnMk-ziOlIRE7kRoFBri0ig
 
 ###
 POST http://localhost:3000/showToken

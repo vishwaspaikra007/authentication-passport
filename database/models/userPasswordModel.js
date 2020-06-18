@@ -1,6 +1,7 @@
 const mongoose = require('../database.config')
+let schema = mongoose.Schema
 
-const schema = {
+const AuthenticatedUser = new schema({
     email: {
         type: mongoose.SchemaTypes.String,
         required: true,
@@ -9,7 +10,12 @@ const schema = {
         type: mongoose.SchemaTypes.String,
         required: true,
     },
-    name: String
-}
-const User = mongoose.model('userPassword', mongoose.Schema(schema))
+    name: String,
+    refreshTokens: [String],
+    img: {
+        type: String,
+        default: "defaultImg"
+    }
+})
+const User = mongoose.model('userPassword', AuthenticatedUser)
 module.exports = User
