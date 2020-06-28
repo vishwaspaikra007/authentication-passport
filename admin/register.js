@@ -23,6 +23,9 @@ router.post('/register',(req, res) => {
                         name: req.body.name
                     })
                     .then((user)=> {
+
+                        
+
                         let payloadData = {}
                         const signedJWT = signJWT({id:user._id, payloadData: payloadData})
                         const signedRefreshJWT = signJWT({id:user._id},"refresh")
@@ -36,8 +39,13 @@ router.post('/register',(req, res) => {
                         userPasswordModel.update({_id: user._id}, {$push: {refreshTokens: signedRefreshJWT}})
                             .then(result => {
                                 console.log(result)
-                                res.cookie("refreshToken",signedRefreshJWT, cookieOptions)
-                                res.status(201).send({registered: true, msg:"registration successfull", signedJWT})
+                                if(result.n) {
+                                    res.cookie("refreshToken",signedRefreshJWT, cookieOptions)
+                                    res.status(201).send({registered: true, msg:"registration successfull", signedJWT})
+                                } else {
+                                    res.status(201).send({registered: true, msg:"registration successfull refresh token generation failed", signedJWT})
+                                }
+                                
                             }).catch(err => {
                                 res.send({registered: false, msg: err})
                             })

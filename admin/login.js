@@ -9,7 +9,7 @@ dotenv.config()
 
 router.post('/login', (req, res, next)=> {
     console.log(req.body, "\n", req.cookies)
-    userPasswordModel.findOne({email: req.body.email})
+    userPasswordModel.findOne({email: req.body.email}).select('+password')
         .then(user => {
             console.log(user)
             if(user){ 
@@ -43,8 +43,13 @@ router.post('/login', (req, res, next)=> {
                         userPasswordModel.update({_id: user._id}, {$push: {refreshTokens: signedRefreshJWT}})
                             .then(result => {
                                 console.log(result)
-                                res.cookie("refreshToken",signedRefreshJWT, cookieOptions)
-                                res.send({logedIn: true, msg:"login successfull", signedJWT})
+                                if(result.n) {
+                                    res.cookie("refreshToken",signedRefreshJWT, cookieOptions)
+                                    res.send({logedIn: true, msg:"login successfull", signedJWT})
+                                } else {
+                                    res.send({logedIn: true, msg:"login successfull refresh token generation failed", signedJWT})
+                                }
+                                
                             }).catch(err => {
                                 res.status(401).send(err)
                             })

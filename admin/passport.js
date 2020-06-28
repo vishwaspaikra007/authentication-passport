@@ -12,15 +12,11 @@ options.secretOrKey = process.env.TOKEN_KEY
 
 passport.use(new JwtStrategy(options, (jwt_payload, done)=> {
     userPasswordModel.findOne({_id: jwt_payload.sub}, (err, user)=> {
-        console.log(user)
-        const userCopy = user.toObject()
-        delete userCopy.password
-        console.log(userCopy)
         if(err) {
             done(err, false)
         }
         if(user) {
-            done(null, userCopy)
+            done(null, user.toObject())
         } else {
             done(null, false)
         }

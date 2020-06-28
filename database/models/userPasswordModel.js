@@ -9,9 +9,13 @@ const AuthenticatedUser = new schema({
     password: {
         type: mongoose.SchemaTypes.String,
         required: true,
+        select: false
     },
     name: String,
-    refreshTokens: [String],
+    refreshTokens: {
+        type: [String],
+        select: false
+    },
     img: {
         type: String,
         default: "defaultImg"
