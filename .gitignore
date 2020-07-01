@@ -1,5 +1,6 @@
 node_modules
 database/dbPath.js
-index.html
+index2.html
 .env
 bfg-1.13.0.jar
+admin/testPost.js

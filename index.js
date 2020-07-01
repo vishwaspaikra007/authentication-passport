@@ -11,6 +11,15 @@ const post = require('./admin/post')
 const requestMail = require('./admin/requestMail')
 const verifyOTP = require('./admin/verifyOTP')
 const refreshToken = require('./admin/refreshToken')
+const createRoom = require('./admin/createRoom')
+const saveUserMetaData = require('./admin/userInfoMetaData')
+const getContacts = require('./admin/getContacts')
+const socketIo = require('socket.io')
+const http = require('http')
+const server = http.createServer(app)
+const io = socketIo(server)
+require('./admin/socket.io')(io)
+
 dotenv.config()
 app.use(express.json())
 app.use(passport.initialize())
@@ -26,14 +35,19 @@ app.set('view engine', 'ejs')
 
 app.use(register)
 app.use(login)
-app.use(post)
+app.use(post) // importing Custom Passport Authentication before deleting make CPA available to others
 app.use(requestMail)
 app.use(verifyOTP)
 app.use(refreshToken)
+app.use(createRoom)
+app.use(saveUserMetaData)
+app.use(getContacts)
+
 app.get('/',(req, res) => {
     res.render('index.ejs')
 })
+
 const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
-    console.log("app is listening on port", PORT)
+server.listen(PORT, () => {
+    console.log("app is listening on port", PORT, " ", (new Date()).toString())
 })

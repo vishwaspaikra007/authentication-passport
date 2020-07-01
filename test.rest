@@ -19,7 +19,7 @@ content-type: application/json
 ###
 
 GET http://localhost:3000/check
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWVhNWQ5YWM1ZjM3MzNjZGYwZmVhMDkiLCJhZ2UiOjI0LCJwb3N0Ijo0MCwiaWF0IjoxNTkyNDg3MTk3LCJleHAiOjE1OTI0ODgwOTd9.dwPYjQtwk3fNpVyOELbUPnMk-ziOlIRE7kRoFBri0ig
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWVmNjI4NGJmMDlmOTJjNDFmMmExN2QiLCJhZ2UiOjI0LCJwb3N0Ijo0MCwiaWF0IjoxNTkyNzY5NzgzLCJleHAiOjE1OTI3NzA2ODN9.BRtnmBNjz_gqY4apx7E1atIDuFdaW9HCjMHRDDI_d-s
 
 ###
 POST http://localhost:3000/showToken

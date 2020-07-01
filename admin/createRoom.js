@@ -28,13 +28,13 @@ router.post('/createRoom',  (req, res, next) => customPassportAuthenticate(req, 
 
                             userInfoMetaDataModel.update(
                                 { _id: recipientId2}, 
-                                {$push : { chats: {_id: chatRoomId, recipientId: recipientId1 }}}
+                                {$addToSet : { chats: {_id: chatRoomId, recipientId: recipientId1 }}}
                             ).then(result => {
                                 console.log("user info 1" , result)
                                 if(result) {
                                     userInfoMetaDataModel.update(
                                         { _id: recipientId1}, 
-                                        {$push : { chats: {_id: chatRoomId, recipientId: recipientId2}}}
+                                        {$addToSet : { chats: {_id: chatRoomId, recipientId: recipientId2}}}
                                     ).then(result => {
                                         console.log("user info 2" , result)
                                         if(result) {
@@ -49,27 +49,31 @@ router.post('/createRoom',  (req, res, next) => customPassportAuthenticate(req, 
                                             roomMessage.save().then(result => {
                                                 console.log("after bot" + result)
                                                 if(result)
-                                                    res.send({roomCreated: true, msg: "room successfuly created", chatRoomId: chatRoomId, recipientId: recipientId2})
+                                                    res.send({roomCreated: true, msg: "room successfuly created", contact: { chatRoomId: chatRoomId, recipientId: recipientId2, name: user.name}})
                                             }).catch(err => {
+                                                console.log("after bot", err)
                                                 res.send({roomCreated: false, msg: err})
                                             })
                                         }
                                     }).catch(err => {
+                                        console.log("userInfo 2", err)
                                         res.send({roomCreated: false, msg: err})
                                     })
                                 }
                             }).catch(err => {
+                                console.log("userInfo 1", err)
                                 res.send({roomCreated: false, msg: err})
                             })
                         }
                     }).catch(err => {
+                        console.log("find err", err)
                         res.send({roomCreated: false, msg: err})
                     })
             }
             else
             {   
                 console.log("user doesn't exist")
-                res.send({msg: "the user is not registered", err: true})    
+                res.send({msg: "the user is not registered", roomCreated: false})    
             }
         }).catch(err => {
             console.log(err)
