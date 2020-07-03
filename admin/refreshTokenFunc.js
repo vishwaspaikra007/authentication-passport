@@ -13,7 +13,7 @@ module.exports = ()=> {
                 if(err)
                     res.send({logedIn: false, msg:"login again"})
                 console.log(data, data.sub)
-                userPasswordModel.update({_id: data.sub}, {$pull: {refreshTokens: req.cookies.refreshToken}})
+                userPasswordModel.updateOne({_id: data.sub}, {$pull: {refreshTokens: req.cookies.refreshToken}})
                 .then(result => {
                     console.log("deleted client old refresh token", result)
                     if(result.n) {
@@ -32,7 +32,7 @@ module.exports = ()=> {
                             secure: JSON.parse(process.env.PRODUCTION) ? true : false
                         }
         
-                        userPasswordModel.update({_id: data.sub}, {$push: {refreshTokens: signedRefreshJWT}})
+                        userPasswordModel.updateOne({_id: data.sub}, {$push: {refreshTokens: signedRefreshJWT}})
                         .then(result => {
                             if(result.n) {
                                 userPasswordModel.findById(data.sub).then(user => {

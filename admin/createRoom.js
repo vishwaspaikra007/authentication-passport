@@ -26,13 +26,13 @@ router.post('/createRoom',  (req, res, next) => customPassportAuthenticate(req, 
                             const recipientId1 = req.user._id
                             const recipientId2 = user._id
 
-                            userInfoMetaDataModel.update(
+                            userInfoMetaDataModel.updateOne(
                                 { _id: recipientId2}, 
                                 {$addToSet : { chats: {_id: chatRoomId, recipientId: recipientId1 }}}
                             ).then(result => {
                                 console.log("user info 1" , result)
                                 if(result) {
-                                    userInfoMetaDataModel.update(
+                                    userInfoMetaDataModel.updateOne(
                                         { _id: recipientId1}, 
                                         {$addToSet : { chats: {_id: chatRoomId, recipientId: recipientId2}}}
                                     ).then(result => {

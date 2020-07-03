@@ -32,7 +32,7 @@ router.post('/login', (req, res, next)=> {
                         }
                         
                         if(req.cookies.refreshToken) {
-                            userPasswordModel.update({_id: user._id}, {$pull: {refreshTokens: req.cookies.refreshToken}}).then(result => {
+                            userPasswordModel.updateOne({_id: user._id}, {$pull: {refreshTokens: req.cookies.refreshToken}}).then(result => {
                                 console.log("deleted client old refresh token", result)
                             }).catch(err => {
                                 console.log("error in deleting old refresh token", err)
@@ -40,7 +40,7 @@ router.post('/login', (req, res, next)=> {
                         }
                         
                         
-                        userPasswordModel.update({_id: user._id}, {$push: {refreshTokens: signedRefreshJWT}})
+                        userPasswordModel.updateOne({_id: user._id}, {$push: {refreshTokens: signedRefreshJWT}})
                             .then(result => {
                                 console.log(result)
                                 if(result.n) {

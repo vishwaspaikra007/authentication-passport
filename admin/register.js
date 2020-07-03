@@ -36,7 +36,7 @@ router.post('/register',(req, res) => {
                             sameSite: 'none',
                             secure: JSON.parse(process.env.PRODUCTION) ? true : false
                         }
-                        userPasswordModel.update({_id: user._id}, {$push: {refreshTokens: signedRefreshJWT}})
+                        userPasswordModel.updateOne({_id: user._id}, {$push: {refreshTokens: signedRefreshJWT}})
                             .then(result => {
                                 console.log(result)
                                 if(result.n) {

@@ -2,9 +2,6 @@ const express = require('express')
 const router = express.Router()
 const userInfoMetaDataModel = require('../database/models/userInfoMetaDataModel')
 
-const passport = require('passport')
-require('./customPassportAuthenticate')(passport)
-
 router.post('/saveUserMetaData', (req, res, next) => customPassportAuthenticate(req, res, next), (req, res) => {
 
     let userInfo = new userInfoMetaDataModel({
