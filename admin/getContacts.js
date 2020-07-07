@@ -17,9 +17,13 @@ function rooms(roomId) {
 }
 
 router.post('/getContacts', (req, res, next)=> customPassportAuthenticate(req, res, next), (req, res) => {
-    userInfoMetaDataModel.findOne({_id: req.user._id}).select('chats')
+    userInfoMetaDataModel.findOne({_id: req.user._id})
         .then(user => {
-            console.log("user.chats", user.chats)
+            console.log("user", user)
+            const userData = {
+                _id: user._id, name: user.name, email: user.email
+            }
+            console.log("userData", userData)
             let contactsId = []
             user.chats.map(obj => {
                 contactsId.push(obj.recipientId)
@@ -27,6 +31,7 @@ router.post('/getContacts', (req, res, next)=> customPassportAuthenticate(req, r
             userInfoMetaDataModel.find({_id: {$in: contactsId}}).select('name')
                 .then(async usersInfo => {
                     console.log("usersInfo", usersInfo)
+                    
                     const usersInfoModified = usersInfo.map(obj => {
                         let obj2 = {
                         recipientId: obj._id,
@@ -46,9 +51,10 @@ router.post('/getContacts', (req, res, next)=> customPassportAuthenticate(req, r
                         console.log(contacts[index]._id)
                         roomsMessages[contacts[index]._id] = await rooms(contacts[index]._id)
                     }
+                    
                     console.log('roomsMessages', roomsMessages)
                     console.log("contacts", contacts)
-                    res.send({contacts: contacts, roomsMessages})
+                    res.send({contacts: contacts, roomsMessages, userData})
 
                 }).catch(err => {
                     res.send(err)
