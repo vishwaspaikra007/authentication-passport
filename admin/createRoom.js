@@ -40,16 +40,18 @@ router.post('/createRoom',  (req, res, next) => customPassportAuthenticate(req, 
                                         if(result) {
                                             let roomMessageModel = mongoose.model(chatRoomId, roomMessageSchema)
 
-                                            let roomMessage = new roomMessageModel({
+                                            const msgData = {
                                                 senderId: 'bot1',
                                                 senderName: 'bot2',
-                                                msg: 'messages are not encrypted yet'
-                                            })
+                                                msg: 'messages are not encrypted yet',
+                                                timestamp: Date.now()
+                                            }
+                                            let roomMessage = new roomMessageModel(msgData)
 
                                             roomMessage.save().then(result => {
                                                 console.log("after bot" + result)
                                                 if(result)
-                                                    res.send({roomCreated: true, msg: "room successfuly created", contact: { chatRoomId: chatRoomId, recipientId: recipientId2, name: user.name}})
+                                                    res.send({roomCreated: true, msg: "room successfuly created", contact: { chatRoomId: chatRoomId, recipientId: recipientId2, name: user.name}, msgData})
                                             }).catch(err => {
                                                 console.log("after bot", err)
                                                 res.send({roomCreated: false, msg: err})
