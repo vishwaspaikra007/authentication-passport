@@ -5,7 +5,6 @@ const { v4: uuidv4 } = require('uuid');
 const roomMessageSchema = require('../database/schema/roomMessageSchema')
 const mongoose = require('../database/database.config')
 const userInfoMetaDataModel = require('../database/models/userInfoMetaDataModel')
-const groupRoomModel = require('../database/models/groupRoomModel')
 
 router.post('/createRoom',  (req, res, next) => customPassportAuthenticate(req, res, next), (req, res) => {
     userPasswordModel.findOne({email: req.body.email})
@@ -50,8 +49,12 @@ router.post('/createRoom',  (req, res, next) => customPassportAuthenticate(req, 
 
                                             roomMessage.save().then(result => {
                                                 console.log("after bot" + result)
-                                                if(result)
-                                                    res.send({roomCreated: true, msg: "room successfuly created", contact: { chatRoomId: chatRoomId, recipientId: recipientId2, name: user.name}, msgData})
+                                                if(result){
+
+                                                    req.app.get('socketIo').to(user.email).emit('newChat', {contact: { _id: chatRoomId, recipientId: recipientId1, name: req.user.name, lastMessageData: msgData }})
+
+                                                    res.send({roomCreated: true, msg: "room successfuly created", contact: { _id: chatRoomId, recipientId: recipientId2, name: user.name, lastMessageData: msgData }})
+                                                }
                                             }).catch(err => {
                                                 console.log("after bot", err)
                                                 res.send({roomCreated: false, msg: err})

@@ -8,7 +8,7 @@ function rooms(roomId) {
     return new Promise((resolve, reject) => {
         const roomModel = mongoose.model(roomId, roomMessageSchema)
         roomModel.find({}).sort({'_id': 1}).then(result => {
-            console.log(result)
+            // console.log(result)
             resolve(result)
         }).catch(err => {
             reject(err)
@@ -19,18 +19,18 @@ function rooms(roomId) {
 router.post('/getContacts', (req, res, next)=> customPassportAuthenticate(req, res, next), (req, res) => {
     userInfoMetaDataModel.findOne({_id: req.user._id})
         .then(user => {
-            console.log("user", user)
+            // console.log("user", user)
             const userData = {
                 _id: user._id, name: user.name, email: user.email
             }
-            console.log("userData", userData)
+            // console.log("userData", userData)
             let contactsId = []
             user.chats.map(obj => {
                 contactsId.push(obj.recipientId)
             })
             userInfoMetaDataModel.find({_id: {$in: contactsId}}).select('name')
                 .then(async usersInfo => {
-                    console.log("usersInfo", usersInfo)
+                    // console.log("usersInfo", usersInfo)
                     
                     const usersInfoModified = usersInfo.map(obj => {
                         let obj2 = {
@@ -40,7 +40,7 @@ router.post('/getContacts', (req, res, next)=> customPassportAuthenticate(req, r
                         delete obj2['_id']
                         return obj2
                     })
-                    console.log("usersInfoModified", usersInfoModified)
+                    // console.log("usersInfoModified", usersInfoModified)
 
                     const contacts = usersInfoModified.map(obj => ({
                         ...user.chats.find(chat => chat.recipientId === obj.recipientId && chat).toObject(), ...obj
@@ -48,12 +48,12 @@ router.post('/getContacts', (req, res, next)=> customPassportAuthenticate(req, r
                     
                     let roomsMessages = {}
                     for(const index in contacts) {
-                        console.log(contacts[index]._id)
+                        // console.log(contacts[index]._id)
                         roomsMessages[contacts[index]._id] = await rooms(contacts[index]._id)
                     }
                     
-                    console.log('roomsMessages', roomsMessages)
-                    console.log("contacts", contacts)
+                    // console.log('roomsMessages', roomsMessages)
+                    // console.log("contacts", contacts)
                     res.send({contacts: contacts, roomsMessages, userData})
 
                 }).catch(err => {

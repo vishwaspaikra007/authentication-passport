@@ -7,15 +7,15 @@ dotenv.config()
 module.exports = ()=> { 
     refreshTokenFunc = (req, res) => {
         if (req.cookies.refreshToken) {
-            console.log(req.cookies.refreshToken)
+            // console.log(req.cookies.refreshToken)
             jwt.verify(req.cookies.refreshToken, process.env.REFRESH_TOKEN_KEY, (err, data) => {
     
                 if(err)
                     res.send({logedIn: false, msg:"login again"})
-                console.log(data, data.sub)
+                // console.log(data, data.sub)
                 userPasswordModel.updateOne({_id: data.sub}, {$pull: {refreshTokens: req.cookies.refreshToken}})
                 .then(result => {
-                    console.log("deleted client old refresh token", result)
+                    // console.log("deleted client old refresh token", result)
                     if(result.n) {
                         let payloadData = {
                             age: 24,
@@ -37,7 +37,7 @@ module.exports = ()=> {
                             if(result.n) {
                                 userPasswordModel.findById(data.sub).then(user => {
                                     if(user) {
-                                        console.log("added new refresh token", result)
+                                        // console.log("added new refresh token", result)
                                         res.cookie("refreshToken",signedRefreshJWT, cookieOptions)
                                         res.send({logedIn: true, msg:"login successfull",email: user.toObject().email,  signedJWT})
                                     } else {
@@ -68,7 +68,7 @@ module.exports = ()=> {
                 
                 
         } else {
-            console.log(req.cookies)
+            // console.log(req.cookies)
             res.send({logedIn: false, msg:"user doesn't exist"})
         }
     }

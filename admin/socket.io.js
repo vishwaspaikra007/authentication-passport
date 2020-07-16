@@ -21,7 +21,7 @@ const socketFunc = (io)=> {
             })
         })        
         socket.on('disconnect', ()=> {
-            console.log("user disconnected")
+            console.log("user disconnected with id", socket ? socket.id : "undefined socket")
         })  
 
     })

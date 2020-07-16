@@ -1,35 +1,41 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
+
+const path = require('path')
+const cookieParser = require('cookie-parser')
+const dotenv = require('dotenv')
+dotenv.config()
+
+const socketIo = require('socket.io')
+const http = require('http')
+const server = http.createServer(app)
+const io = socketIo(server)
+app.set('socketIo', io)
+require('./admin/socket.io')(io)
+
 const register = require('./admin/register')
 const login = require('./admin/login')
-const dotenv = require('dotenv')
 const passport = require('./admin/passport')
-const cors = require('cors')
-const cookieParser = require('cookie-parser')
-const path = require('path')
 const requestMail = require('./admin/requestMail')
 const verifyOTP = require('./admin/verifyOTP')
 const refreshToken = require('./admin/refreshToken')
 const createRoom = require('./admin/createRoom')
 const saveUserMetaData = require('./admin/userInfoMetaData')
 const getContacts = require('./admin/getContacts')
-const socketIo = require('socket.io')
-const http = require('http')
-const server = http.createServer(app)
-const io = socketIo(server)
-require('./admin/socket.io')(io)
+
 require('./admin/customPassportAuthenticate')(passport)
 require('./admin/refreshTokenFunc')()
 
-dotenv.config()
-app.use(express.json())
-app.use(passport.initialize())
+
 app.use(cors(
-    {origin: ['http://127.0.0.1:5500', 'http://localhost:5500', 'http://localhost:3001', 'https://vishwaspaikra007.github.io', 'https://vishwas-auth.herokuapp.com'],
+    {origin: ['http://127.0.0.1:5500', 'http://localhost:5500', 'http://localhost:3001','http://localhost:3000', 'https://vishwaspaikra007.github.io', 'https://vishwas-auth.herokuapp.com'],
      credentials: true}
      ))
-
 app.options('*', cors())  // enable pre-flight request for complex cors request for every route
+app.use(express.json())
+app.use(passport.initialize())
+
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, '/public')))    
 app.set('view engine', 'ejs')
