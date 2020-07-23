@@ -48,7 +48,7 @@ app.use(refreshToken)
 app.use(createRoom)
 app.use(saveUserMetaData)
 app.use(getContacts)
-
+app.use(require('./admin/testRoute'))
 app.get('/',(req, res) => {
     res.render('index.ejs')
 })

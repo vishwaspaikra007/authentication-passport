@@ -28,7 +28,7 @@ router.post('/getContacts', (req, res, next)=> customPassportAuthenticate(req, r
             user.chats.map(obj => {
                 contactsId.push(obj.recipientId)
             })
-            userInfoMetaDataModel.find({_id: {$in: contactsId}}).select('name')
+            userInfoMetaDataModel.find({_id: {$in: contactsId}}).select('name email')
                 .then(async usersInfo => {
                     // console.log("usersInfo", usersInfo)
                     

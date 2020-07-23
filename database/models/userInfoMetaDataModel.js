@@ -41,12 +41,10 @@ const userInfoMetaDataSchema = new schema({
                 type: Date,
                 default: Date.now()
             },
-            status: {
-                type: String,
-                required: true,
-                default: 'active'
-            }}
-        ]
+            seen: Date,
+            received: Date,
+            sent: Date
+        }]
     },
     groups: [String]
 })
