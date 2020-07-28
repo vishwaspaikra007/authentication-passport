@@ -45,6 +45,15 @@ const socketFunc = (io)=> {
                 })
                 .then(result => console.log("seen saved", result))
                 .catch(err => console.log("seen error", err))
+
+                userInfoModel.updateOne({
+                    _id: data.receiverId,chats:{$elemMatch: {_id: data.roomId}}
+                }, {
+                    $set: {'chats.$.roomOpenedTimestamp': data.timestamp}
+                })
+                .then(result => console.log("roomOpenedTimestamp saved", result))
+                .catch(err => console.log("roomOpenedTimestamp error", err))
+
             } else {
 
                 socket.to(data.senderId).emit('msgStatus', {type: data.type, timestamp: data.timestamp, roomId: data.roomId})

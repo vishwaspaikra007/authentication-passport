@@ -43,7 +43,8 @@ const userInfoMetaDataSchema = new schema({
             },
             seen: Date,
             received: Date,
-            sent: Date
+            sent: Date,
+            roomOpenedTimestamp: Date
         }]
     },
     groups: [String]
